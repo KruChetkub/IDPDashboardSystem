@@ -17,7 +17,8 @@ const MONTHS_ORDER = [
   'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
 ];
 
-const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTDXIb-gUUd3pejijQAPQpgoOambCWNo8DfUgbdisLcB9i7YDy_SQxWI4vCsePoh2p1_n0FhuEkNQjI/pub?output=csv';
+// URLs
+const API_URL = '/api/people';
 
 export default function App() {
   const [data, setData] = useState([]);
@@ -76,11 +77,14 @@ export default function App() {
     return [];
   };
 
-  // --- Fetch Data from Google Sheet ---
+  // --- Fetch Data from API Proxy ---
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await fetch(GOOGLE_SHEET_CSV_URL);
+      // Fetch from our new Vercel API (BFF)
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error('Network response was not ok');
+      
       const text = await response.text();
       const parsedData = parseCSV(text);
       setData(parsedData);
