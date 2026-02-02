@@ -20,7 +20,11 @@ export default async function handler(req, res) {
   }
 
   try {
-    const response = await fetch(GOOGLE_SHEET_CSV_URL);
+    // Add cache busting to ensure fresh data from Google Sheets
+    const timestamp = new Date().getTime();
+    const fetchUrl = `${GOOGLE_SHEET_CSV_URL}&t=${timestamp}`;
+
+    const response = await fetch(fetchUrl);
     if (!response.ok) {
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
