@@ -274,6 +274,7 @@ export default function App() {
       if (!peopleMap.has(item.name)) {
         peopleMap.set(item.name, {
           name: item.name,
+          year: item.year, // <--- Add this!
           position: item.position,
           group: item.group,
           department: item.department,
