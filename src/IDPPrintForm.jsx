@@ -67,8 +67,8 @@ export const IDPPrintForm = React.forwardRef(({ person }, ref) => {
 
       {/* --- Header (Garuda Placeholder) --- */}
       <div className="text-center mb-8">
-         <div className="w-[3cm] h-[2.5cm] bg-gray-200 mx-auto mb-4 flex items-center justify-center text-xs text-gray-500">
-            (ตราครุฑ)
+         <div className="w-[3cm] h-[3cm] mx-auto mb-4 flex items-center justify-center">
+            <img src="/logo.png" alt="ตราครุฑ" className="w-full h-full object-contain" />
          </div>
          <h1 className="text-xl font-bold">แผนพัฒนาบุคลากรรายบุคคล (Individual Development Plan : IDP)</h1>
          <h2 className="text-lg font-bold">ประจำปีงบประมาณ {person.year || '2567'}</h2>
