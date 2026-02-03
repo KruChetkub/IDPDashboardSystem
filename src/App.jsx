@@ -4,11 +4,13 @@ import {
   PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
 import * as XLSX from 'xlsx';
+import { useReactToPrint } from 'react-to-print';
+import IDPPrintForm from './IDPPrintForm';
 import { 
   LayoutDashboard, Users, FileText, Settings, Search, Filter, 
   Upload, Download, Menu, X, Briefcase, RefreshCw, UserCheck, Calendar,
   List, Monitor, Users as UsersIcon, BookOpen, Award, CheckSquare, Square,
-  Book, PenTool, Medal, Tag, XCircle, ChevronRight, Moon, Sun
+  Book, PenTool, Medal, Tag, XCircle, ChevronRight, Moon, Sun, Printer
 } from 'lucide-react';
 
 // --- Constants & Color Palettes ---
@@ -63,6 +65,13 @@ export default function App() {
     selectedStartMonths: [],
     selectedDevTypes: [],
     selectedTopics: []
+  });
+
+  // --- Print hook ---
+  const componentRef = React.useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: selectedPerson ? `IDP_Plan_${selectedPerson.name}` : 'IDP_Plan',
   });
 
   // --- Helper: Parse CSV Text ---
@@ -922,12 +931,20 @@ export default function App() {
                       </div>
                    </div>
                 </div>
-                <button 
-                  onClick={() => setSelectedPerson(null)} 
-                  className="bg-white dark:bg-slate-700 text-slate-400 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-all border border-slate-100 dark:border-slate-600 shadow-sm"
-                >
-                   <X size={24} />
-                </button>
+                <div className="flex items-center space-x-2">
+                   <button 
+                      onClick={handlePrint}
+                      className="flex items-center space-x-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-800 px-4 py-2 rounded-lg transition-all text-sm font-semibold border border-indigo-100 dark:border-indigo-800"
+                   >
+                     <Printer size={18} /> <span>พิมพแบบฟอร์ม (PDF)</span>
+                   </button>
+                   <button 
+                     onClick={() => setSelectedPerson(null)} 
+                     className="bg-white dark:bg-slate-700 text-slate-400 dark:text-slate-300 hover:text-red-500 dark:hover:text-red-400 p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-all border border-slate-100 dark:border-slate-600 shadow-sm"
+                   >
+                      <X size={24} />
+                   </button>
+                </div>
              </div>
              
              {/* Modal Body */}
@@ -1006,6 +1023,11 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* --- Hidden Print Component (Rendered for react-to-print) --- */}
+      <div style={{ display: 'none' }}>
+        <IDPPrintForm ref={componentRef} person={selectedPerson} />
+      </div>
 
     </div>
   );
