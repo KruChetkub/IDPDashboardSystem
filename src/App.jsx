@@ -3,6 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
   PieChart, Pie, Cell, LineChart, Line
 } from 'recharts';
+import * as XLSX from 'xlsx';
 import { 
   LayoutDashboard, Users, FileText, Settings, Search, Filter, 
   Upload, Download, Menu, X, Briefcase, RefreshCw, UserCheck, Calendar,
@@ -157,13 +158,81 @@ export default function App() {
   // --- Checkbox Handler ---
   const toggleCheckbox = (field, value) => {
     setFilters(prev => {
-      const currentList = prev[field];
-      const newList = currentList.includes(value)
-        ? currentList.filter(item => item !== value)
-        : [...currentList, value];
-      return { ...prev, [field]: newList };
+      const current = prev[field];
+      const next = current.includes(value)
+        ? current.filter(item => item !== value)
+        : [...current, value];
+      return { ...prev, [field]: next };
     });
   };
+
+  // --- Export Report Logic (Excel) ---
+  const handleExportExcel = () => {
+    try {
+      // 1. Prepare data for Excel (Map to Thai headers)
+      const exportData = filteredData.map((item, idx) => ({
+        'ลำดับ': idx + 1,
+        'ปีงบประมาณ': item.year,
+        'หน่วยงาน': item.department,
+        'กลุ่มงาน': item.group,
+        'ชื่อ-สกุล': item.name,
+        'ตำแหน่ง': item.position,
+        'ผู้ประเมิน': item.evaluator,
+        'ประเภทการพัฒนา': item.devType,
+        'หัวข้อการพัฒนา': item.topic,
+        'เป้าหมาย (Target)': item.target,
+        'ผลลัพธ์ (Actual)': item.actual,
+        'ช่องว่าง (Gap)': item.gap,
+        '70% (การปฏิบัติ)': item.method70,
+        '20% (พี่เลี้ยง)': item.method20,
+        '10% (การอบรม)': item.method10,
+        'เดือนเริ่มต้น': item.startMonth,
+        'เดือนสิ้นสุด': item.endMonth,
+        'งบประมาณ': item.budget,
+        'ตัวชี้วัด (KPI)': item.kpi
+      }));
+
+      // 2. Create Columns Width
+      const wscols = [
+        { wch: 6 },  // ลำดับ
+        { wch: 10 }, // ปี
+        { wch: 20 }, // หน่วยงาน
+        { wch: 15 }, // กลุ่มงาน
+        { wch: 20 }, // ชื่อ
+        { wch: 15 }, // ตำแหน่ง
+        { wch: 20 }, // ผู้ประเมิน
+        { wch: 15 }, // ประเภท
+        { wch: 30 }, // หัวข้อ
+        { wch: 8 },  // Target
+        { wch: 8 },  // Actual
+        { wch: 8 },  // Gap
+        { wch: 20 }, // 70
+        { wch: 20 }, // 20
+        { wch: 20 }, // 10
+        { wch: 12 }, // start
+        { wch: 12 }, // end
+        { wch: 12 }, // budget
+        { wch: 30 }, // kpi
+      ];
+
+      // 3. Generate Worksheet
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+      worksheet['!cols'] = wscols;
+
+      // 4. Generate Workbook
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "IDP_Report");
+
+      // 5. Download File
+      const currentDate = new Date().toISOString().slice(0, 10);
+      XLSX.writeFile(workbook, `IDP_Report_${currentDate}.xlsx`);
+      
+    } catch (error) {
+      console.error("Export Error:", error);
+      alert("เกิดข้อผิดพลาดในการ Export ไฟล์ กรุณาลองใหม่");
+    }
+  };
+
 
   // --- Reusable Checkbox Component ---
   const FilterCheckboxList = ({ title, field, options, maxHeight = "max-h-32" }) => (
@@ -762,7 +831,10 @@ export default function App() {
                   <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
                     <div className="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
                       <h3 className="text-lg font-bold text-slate-800 dark:text-white">รายชื่อบุคลากรและแผนพัฒนา ({filteredData.length} รายการ)</h3>
-                      <button className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-800 transition-colors text-sm font-medium">
+                      <button 
+                         onClick={handleExportExcel}
+                         className="flex items-center space-x-2 px-4 py-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-300 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-800 transition-colors text-sm font-medium"
+                      >
                          <Download size={16} /> <span>Export Report</span>
                       </button>
                     </div>

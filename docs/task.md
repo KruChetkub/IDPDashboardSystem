@@ -1,0 +1,33 @@
+# การย้ายไปใช้ React + Vite
+
+- [x] เริ่มต้นโปรเจกต์ Vite <!-- id: init -->
+    - [x] สร้างโปรเจกต์ด้วยคำสั่ง `npm create vite@latest` <!-- id: create -->
+    - [x] ติดตั้ง Dependencies (`recharts`, `lucide-react`, `tailwindcss`, `postcss`, `autoprefixer`) <!-- id: deps -->
+- [x] ย้ายโค้ดเดิม <!-- id: migrate -->
+    - [x] ตั้งค่า Tailwind CSS <!-- id: tailwind -->
+    - [x] ย้ายโค้ดจาก `index.html` ไปยัง `src/App.jsx` <!-- id: move -->
+    - [x] แก้ไขการ Import และโครงสร้างไฟล์ <!-- id: fix -->
+- [x] การตรวจสอบ <!-- id: verify -->
+    - [x] รัน Server ทดสอบ (Local) <!-- id: run -->
+    - [x] ตรวจสอบฟังก์ชันการทำงาน <!-- id: test -->
+- [x] การตั้งค่า GitHub <!-- id: github -->
+    - [x] เริ่มต้น Git <!-- id: git-init -->
+    - [x] Commit และ Push ขึ้น GitHub <!-- id: git-push -->
+- [x] การนำขึ้น Vercel (Deployment) <!-- id: vercel -->
+    - [x] เชื่อมต่อ GitHub กับ Vercel <!-- id: vercel-connect -->
+    - [x] สั่ง Deploy โปรเจกต์ <!-- id: vercel-deploy -->
+    - [x] ตรวจสอบผลลัพธ์บนออนไลน์ <!-- id: vercel-verify -->
+- [x] การรักษาความปลอดภัยข้อมูล (Security) <!-- id: security -->
+    - [x] สร้างไฟล์ `.env` และตั้งค่า Git Ignore <!-- id: env-setup -->
+    - [x] สร้าง Vercel Serverless Function (`api/people.js`) <!-- id: create-api -->
+    - [x] ปรับแก้ `App.jsx` ให้เรียกผ่าน API <!-- id: update-app -->
+    - [x] ตั้งค่า Environment Variable บน Vercel <!-- id: vercel-env -->
+- [x] การปรับปรุงการดึงข้อมูล (Data Optimization) <!-- id: optimize -->
+    - [x] แก้ปัญหา Caching ของ Google Sheet <!-- id: cache-bust -->
+    - [x] เขียนโค้ดรวมชื่อกลุ่มงานอัตโนมัติ (Normalization) <!-- id: normalize -->
+    - [x] แก้ไขข้อผิดพลาด Syntax <!-- id: fix-syntax -->
+- [x] โหมดสีเข้ม (Dark Mode) <!-- id: dark-mode -->
+    - [x] ตั้งค่า Tailwind Config (`darkMode: 'class'`) <!-- id: dm-config -->
+    - [x] สร้าง Theme State และปุ่มสลับธีม <!-- id: dm-toggle -->
+    - [x] ปรับสี UI ทั้งหมดให้รองรับ Dark Mode (`dark:bg-slate-900`, etc.) <!-- id: dm-ui -->
+    - [x] ปรับสีกราฟ (Recharts) ตามธีม <!-- id: dm-charts -->
