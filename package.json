@@ -13,8 +13,9 @@
     "lucide-react": "^0.300.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "recharts": "^2.10.0",
+    "react-router-dom": "^7.13.0",
     "react-to-print": "^2.14.15",
+    "recharts": "^2.10.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
